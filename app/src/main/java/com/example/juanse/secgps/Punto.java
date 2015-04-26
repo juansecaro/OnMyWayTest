@@ -12,7 +12,7 @@ public class Punto {
     boolean visitado;
 
 
-    public cargarDatosEnPantalla()
+  /*  public cargarDatosEnPantalla()
     {
         // Imagen
 
@@ -21,5 +21,5 @@ public class Punto {
         // Sonido
 
 
-    }
+    }*/
 }
