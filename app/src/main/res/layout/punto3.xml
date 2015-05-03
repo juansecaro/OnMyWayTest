@@ -6,7 +6,7 @@
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/bottom_bar"
         android:orientation="horizontal"
@@ -14,12 +14,6 @@
         android:paddingLeft="4.0dip"
         android:paddingRight="4.0dip"
         android:paddingTop="5.0dip">
-
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="68dp"
-            android:layout_height="66dp"
-            android:src="@mipmap/ic_action_overflow" />
 
         <TextView
             android:id="@+id/vistos"
@@ -95,6 +89,15 @@
         android:layout_toEndOf="@+id/imageButton2"
         android:layout_toRightOf="@+id/imageButton2"
         android:src="@android:drawable/ic_media_pause" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="68dp"
+        android:layout_height="66dp"
+        android:src="@mipmap/ic_action_overflow"
+        android:layout_alignTop="@+id/foto"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

@@ -3,5 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="logodesc">Logo</string>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
     <string name="descripcion">In this article, I’ll be using unicorn as the Rails server. There are definitely other options out there. Rails servers such as puma and thin are quite similar and have their own benefits.</string>
 </resources>
