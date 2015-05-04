@@ -1,7 +1,8 @@
 package com.example.juanse.secgps;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
@@ -9,7 +10,7 @@ import android.widget.ListView;
 
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ListActivity {
 
 
 
@@ -17,11 +18,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         ListView list = new ListView(this);
         setContentView(R.layout.activity_main);//list
-        CustomAdapter adapter = new CustomAdapter(this,R.layout.custom_row,R.id.line1,
-                new String[] {"Nuevo","Continuar","Logros","Configuración","Novedades"});
+       // CustomAdapter adapter = new CustomAdapter(this,R.layout.custom_row,R.id.line1,
+         //       new String[] {"Nuevo","Continuar","Logros","Configuración","Novedades"});
         //ListView listView = (ListView) findViewById(R.id.lista);
 
-        list.setAdapter(adapter);
+       // list.setAdapter(adapter);
+        String[] adobe_products = getResources().getStringArray(R.array.adobe_products);
+        this.setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, R.id.label, adobe_products));
     }
 
 
