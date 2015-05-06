@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
-
-//---------------------
 
 
 public class MainActivity extends ListActivity {
@@ -18,7 +14,7 @@ public class MainActivity extends ListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ListView list = new ListView(this);
+        //ListView list = new ListView(this);
         setContentView(R.layout.activity_main);//list
         // CustomAdapter adapter = new CustomAdapter(this,R.layout.custom_row,R.id.line1,
         //       new String[] {"Nuevo","Continuar","Logros","Configuración","Novedades"});
@@ -31,17 +27,14 @@ public class MainActivity extends ListActivity {
         ListView lv = getListView();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+            @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 //select item
-                String selection = ((TextView) v).getText().toString();
+                String selection =  (String)parent.getItemAtPosition(position);
                 // Launching new Activity on selecting single List Item
-                if (selection.equals("Novedades")) {
                     Intent i = new Intent(getApplicationContext(), Novedades.class);
-                    // sending data to new activity
-                    //i.putExtra("product", product);
                     startActivity(i);
-                }
+
 
 
             }

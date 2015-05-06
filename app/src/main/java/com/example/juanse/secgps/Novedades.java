@@ -13,6 +13,7 @@ import java.net.URL;
 /**
  * Created by Juanse on 05/05/2015.
  */
+
 public class Novedades extends Activity {
 
     TextView textMsg, textPrompt;
@@ -40,11 +41,11 @@ public class Novedades extends Activity {
             bufferReader.close();
             textMsg.setText(stringText);
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             textMsg.setText(e.toString());
         } catch (IOException e) {
-            /* TODO Auto-generated catch block */
+
             e.printStackTrace();
             textMsg.setText(e.toString());
         }

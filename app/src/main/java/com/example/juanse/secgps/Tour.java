@@ -1,4 +1,6 @@
-/*import android.app.Activity;
+package com.example.juanse.secgps;
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.juanse.secgps.R;
 
-iport android.content.Context;
-        i*mport android.content.Context;
-        /package com.example.juanse.secgps;
+
 
 
 public class Tour extends Activity {
@@ -56,4 +55,3 @@ public class Tour extends Activity {
         }
     }
 }
-*/

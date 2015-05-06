@@ -30,6 +30,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
         TextView text = (TextView)row.findViewById(R.id.line1);
         left.setImageResource(R.drawable.left_arrow);
         right.setImageResource(R.drawable.right_arrow);
+
         text.setText(item);
         return row;
     }
