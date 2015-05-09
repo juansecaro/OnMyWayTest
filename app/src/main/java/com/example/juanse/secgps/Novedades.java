@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Juanse on 05/05/2015.
@@ -35,7 +36,13 @@ public class Novedades extends Activity {
         textMsg = (TextView)findViewById(R.id.textmsg);
 
         TextFromURL TUrl = new TextFromURL();
-        TUrl.execute(news);
+        try {
+            news = TUrl.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
 
         textPrompt.setText(news);
@@ -43,13 +50,13 @@ public class Novedades extends Activity {
     }
 
     //---
-    public class TextFromURL extends AsyncTask<String,Integer,String>
+    private class TextFromURL extends AsyncTask<Void,Integer,String>
     {
         @Override
         protected void onPreExecute(){
         }
         @Override
-        protected String doInBackground(String...params){
+        protected String doInBackground(Void...params){
 
             String result = "";
             try {

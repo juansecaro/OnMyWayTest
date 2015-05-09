@@ -5,6 +5,8 @@
         <item>Continuar</item>
         <item>Logros</item>
         <item>Configuraciones</item>
+        <item>Perfil</item>
         <item>Novedades</item>
+        <item>Ayuda</item>
     </string-array>
 </resources>
