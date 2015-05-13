@@ -30,9 +30,29 @@ public class MainActivity extends ListActivity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 //select item
                 String selection =  (String)parent.getItemAtPosition(position);
+                switch (position)
+                {
+                    case 0: //Nuevo Tour
+                        break;
+                    case 1: //Continuar
+                        break;
+                    case 2: //Logros
+                        break;
+                    case 3: //Configuraciones
+                        break;
+                    case 4: //Perfil
+                        break;
+                    case 5: //Novedades
+                        Intent i = new Intent(getApplicationContext(), Novedades.class);
+                        startActivity(i);
+                        break;
+                    case 6: //Ayuda
+                        break;
+
+                }
+
                 // Launching new Activity on selecting single List Item
-                    Intent i = new Intent(getApplicationContext(), Novedades.class);
-                    startActivity(i);
+
 
 
 
