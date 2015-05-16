@@ -1,59 +1,88 @@
 package com.example.juanse.secgps;
 
 import android.util.Log;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
-/**
- *
- * @author jon
- */
 public class Decompress {
-    private String _zipFile;
-    private String _location;
 
-    public Decompress(String zipFile, String location) {
-        _zipFile = zipFile;
-        _location = location;
+    private static final int BUFFER = 80000;
 
-        _dirChecker("");
+    public void zip(String[] _files, String zipFileName) {
+        try {
+            BufferedInputStream origin = null;
+            FileOutputStream dest = new FileOutputStream(zipFileName);
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
+                    dest));
+            byte data[] = new byte[BUFFER];
+
+            for (int i = 0; i < _files.length; i++) {
+                Log.v("Compress", "Adding: " + _files[i]);
+                FileInputStream fi = new FileInputStream(_files[i]);
+                origin = new BufferedInputStream(fi, BUFFER);
+
+                ZipEntry entry = new ZipEntry(_files[i].substring(_files[i]
+                        .lastIndexOf("/") + 1));
+                out.putNextEntry(entry);
+                int count;
+
+                while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                    out.write(data, 0, count);
+                }
+                origin.close();
+            }
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void unzip() {
-        try  {
+    public void unzip(String _zipFile, String _targetLocation) {
+
+
+        // create target location folder if not exist
+        dirChecker(_targetLocation);
+
+        try {
             FileInputStream fin = new FileInputStream(_zipFile);
             ZipInputStream zin = new ZipInputStream(fin);
             ZipEntry ze = null;
             while ((ze = zin.getNextEntry()) != null) {
-                Log.v("Decompress", "Unzipping " + ze.getName());
 
-                if(ze.isDirectory()) {
-                    _dirChecker(ze.getName());
+                // create dir if required while unzipping
+                if (ze.isDirectory()) {
+                    dirChecker(ze.getName());
                 } else {
-                    FileOutputStream fout = new FileOutputStream(_location + ze.getName());
-                    for (int c = zin.read(); c != -1; c = zin.read()) {
-                        fout.write(c);
+                    FileOutputStream fout = new FileOutputStream(
+                            _targetLocation + "/" + ze.getName());
+                    BufferedOutputStream bufout = new BufferedOutputStream(fout);
+                    byte[] buffer = new byte[1024];
+                    int read = 0;
+                    while ((read = zin.read(buffer)) != -1) {
+                        bufout.write(buffer, 0, read);
                     }
 
                     zin.closeEntry();
+                    bufout.close();
                     fout.close();
                 }
-
             }
             zin.close();
-        } catch(Exception e) {
-            Log.e("Decompress", "unzip", e);
+        } catch (Exception e) {
+            System.out.println(e);
         }
-
     }
 
-    private void _dirChecker(String dir) {
-        File f = new File(_location + dir);
-
-        if(!f.isDirectory()) {
+    private void dirChecker(String dir) {
+        File f = new File(dir);
+        if (!f.isDirectory()) {
             f.mkdirs();
         }
     }

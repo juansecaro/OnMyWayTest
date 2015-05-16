@@ -1,109 +1,119 @@
 package com.example.juanse.secgps;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import android.preference.PreferenceManager;
+import android.widget.ImageView;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 
 public class DescargaCiudad extends Activity {
+    private static final String DL_ID = "downloadId";
+    private SharedPreferences prefs;
+    private DownloadManager dm;
+    private ImageView imageView;
 
-    public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
-    private Button startBtn;
-    private ProgressDialog mProgressDialog;
-
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.descargaciudad);
-        startBtn = (Button)findViewById(R.id.startBtn);
-        startBtn.setOnClickListener(new OnClickListener(){
-            public void onClick(View v) {
-                startDownload();
-            }
-        });
+        imageView = new ImageView(this);
+        setContentView(imageView);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
     }
 
-    private void startDownload() {
-        String url = "http://farm1.static.flickr.com/114/298125983_0e4bf66782_b.jpg";
-        new DownloadFileAsync().execute(url);
-    }
     @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DIALOG_DOWNLOAD_PROGRESS:
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage("Downloading file..");
-                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.show();
-                return mProgressDialog;
-            default:
-                return null;
+    public void onResume() {
+        super.onResume();
+        if (!prefs.contains(DL_ID)) {
+//Start the download
+            Uri resource = Uri.parse("http://www.adeter.org/zipSample.zip");
+            DownloadManager.Request request = new DownloadManager.Request(resource);
+//Set allowed connections to process download
+            request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE
+                    | DownloadManager.Request.NETWORK_WIFI);
+            request.setAllowedOverRoaming(false);
+//Finding a place to be saved
+
+            request.setDestinationInExternalPublicDir("/omw", "zipSample1.zip");
+
+//Display in the notification bar
+            request.setTitle("Download Sample");
+            long id = dm.enqueue(request);
+//Save the unique id
+            prefs.edit().putLong(DL_ID, id).commit();
+        } else {
+            //Download already started, check status
+            queryDownloadStatus();
+        }
+        registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            queryDownloadStatus();
+        }
+    };
+
+    private void queryDownloadStatus() {
+        DownloadManager.Query query = new DownloadManager.Query();
+        query.setFilterById(prefs.getLong(DL_ID, 0));
+        Cursor c = dm.query(query);
+
+        if (c.moveToFirst()) {
+            int status = c.getInt(
+                    c.getColumnIndex(DownloadManager.COLUMN_STATUS));
+            switch (status) {
+                case DownloadManager.STATUS_PAUSED:
+                case DownloadManager.STATUS_PENDING:
+                case DownloadManager.STATUS_RUNNING:
+//Do nothing, still in progress
+                    break;
+                case DownloadManager.STATUS_SUCCESSFUL:
+//Done, display the image
+                    try {
+                        //bajado con e
+                        String ZipFileLocation = "/sdcard/omw/zipSample1.zip";
+                        String unzipLocation = "/sdcard/omw/";
+
+
+                        // Initiate ZipFile object with the path/name of the zip file.
+                        ZipFile zipFile = new ZipFile(ZipFileLocation);
+                        // Extracts all files to the path specified
+                        zipFile.extractAll(unzipLocation);
+
+                    } catch (ZipException e) {
+                         e.printStackTrace();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case DownloadManager.STATUS_FAILED:
+//Clear the download and try again later
+                    dm.remove(prefs.getLong(DL_ID, 0));
+                    prefs.edit().clear().commit();
+                    break;
+            }
         }
     }
 
-    class DownloadFileAsync extends AsyncTask<String, String, String> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showDialog(DIALOG_DOWNLOAD_PROGRESS);
-        }
 
-        @Override
-        protected String doInBackground(String... aurl) {
-            int count;
-
-            try {
-
-                URL url = new URL(aurl[0]);
-                URLConnection conexion = url.openConnection();
-                conexion.connect();
-
-                int lenghtOfFile = conexion.getContentLength();
-                Log.d("ANDRO_ASYNC", "Lenght of file: " + lenghtOfFile);
-
-                InputStream input = new BufferedInputStream(url.openStream());
-                OutputStream output = new FileOutputStream("/sdcard/some_photo_from_gdansk_poland.jpg");
-
-                byte data[] = new byte[1024];
-
-                long total = 0;
-
-                while ((count = input.read(data)) != -1) {
-                    total += count;
-                    publishProgress(""+(int)((total*100)/lenghtOfFile));
-                    output.write(data, 0, count);
-                }
-
-                output.flush();
-                output.close();
-                input.close();
-            } catch (Exception e) {}
-            return null;
-
-        }
-        protected void onProgressUpdate(String... progress) {
-            Log.d("ANDRO_ASYNC",progress[0]);
-            mProgressDialog.setProgress(Integer.parseInt(progress[0]));
-        }
-
-        @Override
-        protected void onPostExecute(String unused) {
-            dismissDialog(DIALOG_DOWNLOAD_PROGRESS);
-        }
-    }
 }

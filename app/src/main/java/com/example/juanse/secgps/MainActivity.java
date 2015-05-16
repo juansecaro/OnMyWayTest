@@ -29,10 +29,13 @@ public class MainActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 //select item
+                Intent i;
                 String selection =  (String)parent.getItemAtPosition(position);
                 switch (position)
                 {
                     case 0: //Nuevo Tour
+                        i = new Intent(getApplicationContext(), DescargaCiudad.class);
+                        startActivity(i);
                         break;
                     case 1: //Continuar
                         break;
@@ -43,7 +46,7 @@ public class MainActivity extends ListActivity {
                     case 4: //Perfil
                         break;
                     case 5: //Novedades
-                        Intent i = new Intent(getApplicationContext(), Novedades.class);
+                        i = new Intent(getApplicationContext(), Novedades.class);
                         startActivity(i);
                         break;
                     case 6: //Ayuda
