@@ -51,13 +51,13 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:src="@android:drawable/stat_notify_sync"
-        android:layout_toStartOf="@+id/imageButton2"
-        android:layout_toLeftOf="@+id/imageButton2" />
+        android:layout_toStartOf="@+id/bPlay"
+        android:layout_toLeftOf="@+id/bPlay" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton2"
+        android:id="@+id/bPlay"
         android:layout_alignRight="@+id/foto"
         android:layout_alignEnd="@+id/foto"
         android:layout_alignLeft="@+id/foto"
@@ -73,9 +73,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:src="@android:drawable/ic_media_pause"
-        android:layout_toRightOf="@+id/imageButton2"
-        android:layout_toEndOf="@+id/imageButton2"
-        android:layout_alignTop="@+id/imageButton2" />
+        android:layout_toRightOf="@+id/bPlay"
+        android:layout_toEndOf="@+id/bPlay"
+        android:layout_alignTop="@+id/bPlay" />
 
     <ImageButton
         android:layout_width="wrap_content"
