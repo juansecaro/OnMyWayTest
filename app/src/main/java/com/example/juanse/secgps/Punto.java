@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Juanse on 23/04/2015.
  */
@@ -16,8 +18,7 @@ public class Punto extends Activity {
     String uriFoto;
     String descripcion;
     String uriAudio;
-    float latitud;
-    float longitud;
+    LatLng coordenadas;
     boolean visitado;
     private ImageButton mPlay;
     private MediaPlayer mPlayer;

@@ -12,11 +12,12 @@
         android:layout_height="wrap_content">
 
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/map"
+        <fragment
+            android:id="@+id/mainnmap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:name="com.google.android.gms.maps.MapFragment"/>
+            android:name="com.google.android.gms.maps.MapFragment"
+            />
 
         </LinearLayout>
 
