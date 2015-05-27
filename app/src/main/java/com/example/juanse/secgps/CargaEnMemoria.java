@@ -1,6 +1,10 @@
 package com.example.juanse.secgps;
 
+import com.opencsv.CSVReader;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 /**
  * Created by Juanse on 16/05/2015.
@@ -8,9 +12,10 @@ import java.io.File;
 public class CargaEnMemoria {
 
 
-    public void Carga()//conviene que sea boolean
+    public void Carga() throws FileNotFoundException//conviene que sea boolean
 
     {
+        CSVReader reader = new CSVReader(new FileReader("yourfile.csv"));
         String rutaDirectorio ="";
         File f = new File(rutaDirectorio);
 

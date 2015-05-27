@@ -12,8 +12,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
+
+import com.opencsv.CSVReader;
+
 import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class DescargaCiudad extends Activity {
     private static final String DL_ID = "downloadId";
@@ -98,9 +103,6 @@ public class DescargaCiudad extends Activity {
                         // Extracts all files to the path specified
                         zipFile.extractAll(unzipLocation);
 
-                    } catch (ZipException e) {
-                         e.printStackTrace();
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -113,7 +115,10 @@ public class DescargaCiudad extends Activity {
             }
         }
     }
+public void csv(String S) throws FileNotFoundException {
+    CSVReader reader = new CSVReader(new FileReader(S));
 
+}
 
 
 }
