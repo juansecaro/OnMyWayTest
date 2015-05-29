@@ -51,4 +51,5 @@ public class MainMap extends FragmentActivity {
                 .icon(BitmapDescriptorFactory.fromBitmap(iconBmp)));
 
     }
+
 }

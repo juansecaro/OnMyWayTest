@@ -15,16 +15,17 @@ import java.util.ArrayList;
 public class CargaEnMemoria {
 
     String ruta = Environment.getExternalStorageDirectory()+"/omw/";
-    ArrayList<Punto> nombreArrayList = new ArrayList<Punto>();
+    ArrayList<Punto> ArrayPuntos = new ArrayList<Punto>();
 
-    public void Fromcsv(String ruta) throws IOException {
+    public ArrayList<Punto> FromCsv (String ruta) throws IOException {
 
         CSVReader reader = new CSVReader(new FileReader(ruta));//+archivo
         String[] nextLine;
-        String Paux; //Cadena paira almacenar el punto auxiliar recogido
+        String Paux; //Cadena para almacenar el punto auxiliar recogido
         String text;
         String categoria;
         String fileName;
+
         while ((nextLine = reader.readNext()) != null) {
             // nextLine[] is an array of values from the line
             Paux=nextLine[0];
@@ -37,8 +38,8 @@ public class CargaEnMemoria {
             fileName=nextLine[4];
             //declaro punto e inserto
             Punto punto = new Punto(coord,categoria,Integer.parseInt(fileName));
+            ArrayPuntos.add(Integer.parseInt(fileName),punto);
         }
-
-
+    return  ArrayPuntos;
     }
 }
