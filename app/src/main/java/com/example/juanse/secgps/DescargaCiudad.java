@@ -13,18 +13,19 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
 
-import com.opencsv.CSVReader;
-
 import net.lingala.zip4j.core.ZipFile;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 public class DescargaCiudad extends Activity {
     private static final String DL_ID = "downloadId";
     private SharedPreferences prefs;
     private DownloadManager dm;
     private ImageView imageView;
+
+
+
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,10 +116,7 @@ public class DescargaCiudad extends Activity {
             }
         }
     }
-public void csv(String S) throws FileNotFoundException {
-    CSVReader reader = new CSVReader(new FileReader(S));
 
-}
 
 
 }

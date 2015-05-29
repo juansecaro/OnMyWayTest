@@ -11,52 +11,79 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 /**
  * Created by Juanse on 23/04/2015.
  */
 public class Punto extends Activity {
     String uriFoto;
-    String descripcion;
     String uriAudio;
+    String descripcion;
+
+    String categoria;
     LatLng coordenadas;
     boolean visitado;
     private ImageButton mPlay;
     private MediaPlayer mPlayer;
 
+    public Punto(LatLng coor, String cat, int nArchivo) {
+        coordenadas = coor;
+        categoria = cat;
+        uriFoto = nArchivo + ".png";
+        uriAudio = nArchivo + ".ogg";
+        String uriDes = nArchivo + "txt";
+        descripcion = LeerTxt(uriDes);
+    }
+
+    public String LeerTxt(String rutaTxt) {
+        String Aux = "";
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File(rutaTxt);
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            // Lectura del fichero
+            String linea;
+            while ((linea = br.readLine()) != null)
+                Aux = Aux + linea;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            try {
+                if (fr != null) {
+                    fr.close();
+                }
+
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return Aux;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.punto);
-        mPlay = (ImageButton)findViewById(R.id.bPlay);
+        mPlay = (ImageButton) findViewById(R.id.bPlay);
         addButtonListener();
-        /*mPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                {
-                    if(mPlayer == null) {
-                        try {
-                            mPlayer = MediaPlayer.create(Punto.this,
-                                    Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/1.ogg"));
-                            mPlayer.start();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    } else {
-                        mPlayer.stop();
-                        mPlayer.release();
-                        mPlayer = null;
-                    }
-                }
-
-            }
-        });*/
 
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mPlayer != null) {
+        if (mPlayer != null) {
             mPlayer.release();
         }
     }
@@ -64,23 +91,21 @@ public class Punto extends Activity {
     //OnCompletionListener Methods
 
 
+    /*  public cargarDatosEnPantalla()
+      {
+          // Imagen
 
-  /*  public cargarDatosEnPantalla()
-    {
-        // Imagen
+          // Descripción
 
-        // Descripción
-
-        // Sonido
+          // Sonido
 
 
-    }*/
-    public void Audio()
-    {
-
+      }*/
+    public void Audio() {
 
 
     }
+
     public void addButtonListener() {
 
         mPlay = (ImageButton) findViewById(R.id.bPlay);
@@ -101,7 +126,6 @@ public class Punto extends Activity {
         });
 
     }
-
 
 
 }
