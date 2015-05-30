@@ -34,7 +34,7 @@ public class MainActivity extends ListActivity {
                 switch (position)
                 {
                     case 0: //Nuevo Tour
-                        i = new Intent(getApplicationContext(), MainMap.class);
+                        i = new Intent(getApplicationContext(), DescargaCiudad.class);
                         startActivity(i);
                         break;
                     case 1: //Continuar

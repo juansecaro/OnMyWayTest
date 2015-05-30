@@ -103,6 +103,9 @@ public class DescargaCiudad extends Activity {
                         ZipFile zipFile = new ZipFile(ZipFileLocation);
                         // Extracts all files to the path specified
                         zipFile.extractAll(unzipLocation);
+                        // Call the map main activity to draw the points
+                        Intent i = new Intent(getApplicationContext(), MainMap.class);
+                        startActivity(i);
 
                     } catch (Exception e) {
                         e.printStackTrace();

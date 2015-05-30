@@ -37,6 +37,9 @@ public class Punto extends Activity {
         String uriDes = nArchivo + "txt";
         descripcion = LeerTxt(uriDes);
     }
+    public Punto(){}
+
+    public LatLng getCoordenadas(){return coordenadas;}
 
     public String LeerTxt(String rutaTxt) {
         String Aux = "";
