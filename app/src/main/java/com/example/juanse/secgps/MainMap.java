@@ -136,7 +136,8 @@ public class MainMap extends FragmentActivity implements
                     .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
                             // Set the transition types of interest. Alerts are only generated for these
                             // transition. We track entry and exit transitions in this sample.
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                            Geofence.GEOFENCE_TRANSITION_EXIT)
                             // Create the geofence.
                     .build());
 
@@ -145,6 +146,11 @@ public class MainMap extends FragmentActivity implements
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las últimas coordenadas y con zoom de 10
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        removeGeofences();
     }
 
     @Override
@@ -158,6 +164,9 @@ public class MainMap extends FragmentActivity implements
         super.onStop();
         mGoogleApiClient.disconnect();
     }
+
+
+
 // --
 
 
