@@ -6,7 +6,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,7 +26,8 @@ import java.util.Iterator;
 /**
  * Created by Juanse on 17/05/2015.
  */
-public class MainMap extends FragmentActivity  {
+public class MainMap extends FragmentActivity  implements
+        ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
 
     float RED = BitmapDescriptorFactory.HUE_RED; // Turístico
     float ORANGE = BitmapDescriptorFactory.HUE_ORANGE; // Histórico
@@ -106,4 +112,23 @@ public class MainMap extends FragmentActivity  {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las últimas coordenadas y con zoom de 10
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onResult(Status status) {
+
+    }
 }
