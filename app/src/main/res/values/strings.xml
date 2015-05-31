@@ -16,5 +16,9 @@
     <string name="geofence_transition_entered">geofence_transition_entered</string>
     <string name="geofence_transition_notification_text">geofence_transition_notification_text</string>
     <string name="geofence_transition_invalid_type">geofence_transition_invalid_type</string>
+    <string name="geofences_added">geofences_added</string>
+    <string name="geofences_removed">geofences_removed</string>
+    <string name="not_connected">not_connected</string>
+
 
 </resources>
