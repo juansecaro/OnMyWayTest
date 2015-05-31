@@ -7,4 +7,14 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <string name="descripcion">In this article, I’ll be using unicorn as the Rails server. There are definitely other options out there. Rails servers such as puma and thin are quite similar and have their own benefits.</string>
+    <string name="unknown_geofence_error">Geofence: Error desconocido</string>
+    <string name="geofence_too_many_pending_intents">Geofence: Demasiados PendingIntents</string>
+    <string name="geofence_too_many_geofences">geofence_too_many_geofences</string>
+    <string name="geofence_not_available">geofence_not_available</string>
+    <string name="unknown_geofence_transition">unknown_geofence_transition</string>
+    <string name="geofence_transition_exited">geofence_transition_exited</string>
+    <string name="geofence_transition_entered">geofence_transition_entered</string>
+    <string name="geofence_transition_notification_text">geofence_transition_notification_text</string>
+    <string name="geofence_transition_invalid_type">geofence_transition_invalid_type</string>
+
 </resources>

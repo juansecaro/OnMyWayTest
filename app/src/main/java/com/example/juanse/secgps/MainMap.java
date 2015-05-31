@@ -1,9 +1,13 @@
 package com.example.juanse.secgps;
 
+import android.app.PendingIntent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -17,7 +21,7 @@ import java.util.Iterator;
 /**
  * Created by Juanse on 17/05/2015.
  */
-public class MainMap extends FragmentActivity {
+public class MainMap extends FragmentActivity  {
 
     float RED = BitmapDescriptorFactory.HUE_RED; // Turístico
     float ORANGE = BitmapDescriptorFactory.HUE_ORANGE; // Histórico
@@ -25,10 +29,38 @@ public class MainMap extends FragmentActivity {
     float GREEN = BitmapDescriptorFactory.HUE_GREEN; // Gangas (Bargains)
 
     private GoogleMap mMap;
+
     String ruta = Environment.getExternalStorageDirectory() + "/omw/zipSample/";
 
     ArrayList<Punto> ArrayPuntos = new ArrayList<Punto>();
     Memory Mem = new Memory();
+
+    protected static final String TAG = "creating-and-monitoring-geofences";
+
+    /**
+     * Provides the entry point to Google Play services.
+     */
+    protected GoogleApiClient mGoogleApiClient;
+
+    /**
+     * The list of geofences used in this sample.
+     */
+    protected ArrayList<Geofence> mGeofenceList;
+
+    /**
+     * Used to keep track of whether geofences were added.
+     */
+    private boolean mGeofencesAdded;
+
+    /**
+     * Used when requesting to add or remove geofences.
+     */
+    private PendingIntent mGeofencePendingIntent;
+
+    /**
+     * Used to persist application state about whether geofences were added.
+     */
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +103,7 @@ public class MainMap extends FragmentActivity {
             }
 
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las últimas coordenadas y con zoom de 10
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las últimas coordenadas y con zoom de 10
     }
 
 }
