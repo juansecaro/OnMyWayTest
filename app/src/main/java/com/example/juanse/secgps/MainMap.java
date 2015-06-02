@@ -31,8 +31,8 @@ public class MainMap extends FragmentActivity {
 
     protected static final String TAG = "MainMap";
 
-    float RED = BitmapDescriptorFactory.HUE_RED; // Turístico
-    float ORANGE = BitmapDescriptorFactory.HUE_ORANGE; // Histórico
+    float RED = BitmapDescriptorFactory.HUE_RED; // Turistico
+    float ORANGE = BitmapDescriptorFactory.HUE_ORANGE; // Historico
     float YELLOW = BitmapDescriptorFactory.HUE_YELLOW; // Curioso
     float GREEN = BitmapDescriptorFactory.HUE_GREEN; // Gangas (Bargains)
 
@@ -46,9 +46,6 @@ public class MainMap extends FragmentActivity {
     Memory Mem = new Memory();
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +53,6 @@ public class MainMap extends FragmentActivity {
         mManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mainnmap)).getMap();
         LatLng L;
-
 
 
         try {
@@ -68,7 +64,7 @@ public class MainMap extends FragmentActivity {
         Iterator<Punto> iterator = ArrayPuntos.iterator();
         while (iterator.hasNext()) {
             Punto P = iterator.next();
-            switch (P.categoria) //Dibujamos según tipo de punto
+            switch (P.categoria) //Dibujamos segun tipo de punto
             {
                 case "HIS":
                     mMap.addMarker(new MarkerOptions()
@@ -95,12 +91,13 @@ public class MainMap extends FragmentActivity {
 
         }
         mMap.setMyLocationEnabled(true);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las últimas coordenadas y con zoom de 10
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las ultimas coordenadas y con zoom de 10
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        if(!mManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!mManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             //Ask the user to enable GPS
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Location Manager");
@@ -115,7 +112,7 @@ public class MainMap extends FragmentActivity {
             });
             builder.setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog,int which) {
+                public void onClick(DialogInterface dialog, int which) {
                     //No location service, no Activity
                     finish();
                 }
@@ -130,45 +127,56 @@ public class MainMap extends FragmentActivity {
         float minDistance = 0;
         mManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mListener);
     }
+
     @Override
     public void onPause() {
         super.onPause();
         //Disable updates when we are not in the foreground
         // mManager.removeUpdates(mListener);
     }
+
     /**
      * Vamos a establecer un cuadrante en base a un punto, siendo este el centro del mismo
-     *
+     * <p/>
      * decimal
-     places   degrees          distance
-     -------  -------          --------
-     0        1                111  km
-     1        0.1              11.1 km
-     2        0.01             1.11 km
-     3        0.001            111  m
-     4        0.0001           11.1 m
-     5        0.00001          1.11 m
-     6        0.000001         11.1 cm
-     7        0.0000001        1.11 cm
-     8        0.00000001       1.11 mm
-     * **/
-    public boolean IsInside (Punto P)//In meters
+     * places   degrees          distance
+     * -------  -------          --------
+     * 0        1                111  km
+     * 1        0.1              11.1 km
+     * 2        0.01             1.11 km
+     * 3        0.001            111  m
+     * 4        0.0001           11.1 m
+     * 5        0.00001          1.11 m
+     * 6        0.000001         11.1 cm
+     * 7        0.0000001        1.11 cm
+     * 8        0.00000001       1.11 mm
+     * *
+     */
+    public boolean IsInside(Punto P)//In meters
     {
-         // 0.00001 // equivale a 1.11 m
-        double factor  = P.alcance*0.00001; // numero por el que multiplicamos para calcular el alcance efectivo
+        // 0.00001 // equivale a 1.11 m
+        double factor = P.alcance * 0.00001; // numero por el que multiplicamos para calcular el alcance efectivo
         double latmax = P.getCoordenadas().latitude + factor;
         double latmin = P.getCoordenadas().latitude - factor;
         double lngmax = P.getCoordenadas().longitude + factor;
         double lngmin = P.getCoordenadas().longitude - factor;
+        boolean inside = false;
 
-        if (latmin <= mCurrentLocation.getLatitude()) return false;
-        if  (mCurrentLocation.getLatitude() >= latmax) return  false;
-        if (lngmin <= mCurrentLocation.getLongitude()) return false;
-        if (mCurrentLocation.getLongitude() >= lngmax) return false;
+        if (latmin <= mCurrentLocation.getLatitude()) {
 
+            if (mCurrentLocation.getLatitude() <= latmax) {
+
+                if (lngmin <= mCurrentLocation.getLongitude()) {
+
+                    if (mCurrentLocation.getLongitude() <= lngmax) {
+                        inside = true;
+                    }
+                }
+            }
+        }
         // Then, we are in the range
-        return true;
 
+        return inside;
     }
 
 
@@ -178,32 +186,38 @@ public class MainMap extends FragmentActivity {
         @Override
         public void onLocationChanged(Location location) {
             mCurrentLocation = location;
-            //updateDisplay();
-        }
-        //The requested provider was disabled in settings
-        @Override
-        public void onProviderDisabled(String provider) { }
-        //The requested provider was enabled in settings
-        @Override
-        public void onProviderEnabled(String provider) { }
-        //Availability changes in the requested provider
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
             Iterator<Punto> iterator = ArrayPuntos.iterator();
             while (iterator.hasNext()) {
                 Punto P = iterator.next();
-                if(IsInside(P))
-                {
+                if (IsInside(P)) {
                     Toast toast1 =
                             Toast.makeText(getApplicationContext(),
-                                    "Entrando en:" + P.descripcion, Toast.LENGTH_SHORT);
+                                    "Entrando en:" + P.uriFoto, Toast.LENGTH_SHORT);
 
                     toast1.show();
+
 
                 }
 
             }
+            //updateDisplay();
+        }
+
+        //The requested provider was disabled in settings
+        @Override
+        public void onProviderDisabled(String provider) {
+        }
+
+        //The requested provider was enabled in settings
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        //Availability changes in the requested provider
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+
         }
     };
 
