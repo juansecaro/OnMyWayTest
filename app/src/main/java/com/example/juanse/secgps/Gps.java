@@ -1,11 +1,27 @@
 package com.example.juanse.secgps;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
+import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by Juanse on 11/05/2015.
  */
-public class Gps {
+public class Gps extends Activity{
 
-    /*
+
     private LocationManager mManager;
     private Location mCurrentLocation;
 
@@ -27,10 +43,10 @@ public class Gps {
 
 
 //Declaro para interfaz
-         latitud = (TextView)findViewById(R.id.latitud);
+        /* latitud = (TextView)findViewById(R.id.latitud);
          longitud = (TextView)findViewById(R.id.longitud);
          precision = (TextView)findViewById(R.id.precision);
-         ttiempo = (TextView)findViewById(R.id.ttiempo);
+         ttiempo = (TextView)findViewById(R.id.ttiempo);*/
 
         // Declaro para funcionalidad
         mManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -127,6 +143,6 @@ public class Gps {
     };
 
 
-*/
+
 
 }

@@ -1,27 +1,23 @@
 package com.example.juanse.secgps;
 
-import android.app.PendingIntent;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -31,8 +27,9 @@ import java.util.Iterator;
 /**
  * Created by Juanse on 17/05/2015.
  */
-public class MainMap extends FragmentActivity implements
-        ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
+public class MainMap extends FragmentActivity {
+
+    protected static final String TAG = "MainMap";
 
     float RED = BitmapDescriptorFactory.HUE_RED; // Turístico
     float ORANGE = BitmapDescriptorFactory.HUE_ORANGE; // Histórico
@@ -40,50 +37,26 @@ public class MainMap extends FragmentActivity implements
     float GREEN = BitmapDescriptorFactory.HUE_GREEN; // Gangas (Bargains)
 
     private GoogleMap mMap;
+    private LocationManager mManager;
+    private Location mCurrentLocation;
 
     String ruta = Environment.getExternalStorageDirectory() + "/omw/zipSample/";
 
     ArrayList<Punto> ArrayPuntos = new ArrayList<Punto>();
     Memory Mem = new Memory();
 
-    protected static final String TAG = "creating-geofences";
 
-    /**
-     * Provides the entry point to Google Play services.
-     */
-    protected GoogleApiClient mGoogleApiClient;
 
-    /**
-     * The list of geofences used in this sample.
-     */
-    protected ArrayList<Geofence> mGeofenceList;
 
-    /**
-     * Used to keep track of whether geofences were added.
-     */
-    private boolean mGeofencesAdded;
-
-    /**
-     * Used when requesting to add or remove geofences.
-     */
-    private PendingIntent mGeofencePendingIntent;
-
-    /**
-     * Used to persist application state about whether geofences were added.
-     */
-    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmap);
+        mManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mainnmap)).getMap();
-        mGeofenceList = new ArrayList<Geofence>();
-        // inicializamos a null el Pending Intent de add y remove geos
-        mGeofencePendingIntent = null;
-        mSharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, MODE_PRIVATE);
-        // Get the value of mGeofencesAdded from SharedPreferences. Set to false as a default.
-        mGeofencesAdded = mSharedPreferences.getBoolean(Constants.GEOFENCES_ADDED_KEY, false);
+        LatLng L;
+
 
 
         try {
@@ -120,189 +93,119 @@ public class MainMap extends FragmentActivity implements
             }
             // Creamos Geofence de dicho punto
 
-            mGeofenceList.add(new Geofence.Builder()
-                    // Set the request ID of the geofence. This is a string to identify this
-                    // geofence.
-                    .setRequestId(P.uriFoto) //uso urifoto como identificador, que es unico
-
-                            // Set the circular region of this geofence.
-                    .setCircularRegion(
-                            P.getCoordenadas().latitude,
-                            P.getCoordenadas().longitude,
-                            Constants.GEOFENCE_RADIUS_IN_METERS
-                    )
-                            // Set the expiration duration of the geofence. This geofence gets automatically
-                            // removed after this period of time.
-                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
-                            // Set the transition types of interest. Alerts are only generated for these
-                            // transition. We track entry and exit transitions in this sample.
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
-                            // Create the geofence.
-                    .build());
-
-
         }
-        // Kick off the request to build GoogleApiClient.
-        buildGoogleApiClient();
+        mMap.setMyLocationEnabled(true);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las últimas coordenadas y con zoom de 10
     }
     @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        removeGeofences();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
-    }
-
-
-
-// --
-
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i(TAG, "Connected to GoogleApiClient");
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        // The connection to Google Play services was lost for some reason.
-        Log.i(TAG, "Connection suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
-    }
-
-    @Override
-    public void onResult(Status status) {
-        if (status.isSuccess()) {
-            // Update state and save in shared preferences.
-            mGeofencesAdded = !mGeofencesAdded;
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putBoolean(Constants.GEOFENCES_ADDED_KEY, mGeofencesAdded);
-            editor.commit();
-
-            // Update the UI. Adding geofences enables the Remove Geofences button, and removing
-            // geofences enables the Add Geofences button.
-
-
-            Toast.makeText(
-                    this,
-                    getString(mGeofencesAdded ? R.string.geofences_added : R.string.geofences_removed),
-                    Toast.LENGTH_SHORT
-            ).show();
-        } else {
-            // Get the status code for the error and log it using a user-friendly message.
-            String errorMessage = GeofenceErrorMessages.getErrorString(this,
-                    status.getStatusCode());
-            Log.e(TAG, errorMessage);
+    public void onResume() {
+        super.onResume();
+        if(!mManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            //Ask the user to enable GPS
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Location Manager");
+            builder.setMessage(R.string.location_needed);
+            builder.setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Launch settings, allowing user to change
+                    Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(i);
+                }
+            });
+            builder.setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog,int which) {
+                    //No location service, no Activity
+                    finish();
+                }
+            });
+            builder.create().show();
         }
+        //Get a cached location, if it exists
+        mCurrentLocation = mManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        //updateDisplay();
+        //Register for updates
+        int minTime = 8000;// in milliseconds
+        float minDistance = 0;
+        mManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, mListener);
     }
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Disable updates when we are not in the foreground
+        // mManager.removeUpdates(mListener);
+    }
     /**
-     * Gets a PendingIntent to send with the request to add or remove Geofences. Location Services
-     * issues the Intent inside this PendingIntent whenever a geofence transition occurs for the
-     * current list of geofences.
+     * Vamos a establecer un cuadrante en base a un punto, siendo este el centro del mismo
      *
-     * @return A PendingIntent for the IntentService that handles geofence transitions.
-     */
-    private PendingIntent getGeofencePendingIntent() {
-        // Reuse the PendingIntent if we already have it.
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
+     * decimal
+     places   degrees          distance
+     -------  -------          --------
+     0        1                111  km
+     1        0.1              11.1 km
+     2        0.01             1.11 km
+     3        0.001            111  m
+     4        0.0001           11.1 m
+     5        0.00001          1.11 m
+     6        0.000001         11.1 cm
+     7        0.0000001        1.11 cm
+     8        0.00000001       1.11 mm
+     * **/
+    public boolean IsInside (Punto P)//In meters
+    {
+         // 0.00001 // equivale a 1.11 m
+        double factor  = P.alcance*0.00001; // numero por el que multiplicamos para calcular el alcance efectivo
+        double latmax = P.getCoordenadas().latitude + factor;
+        double latmin = P.getCoordenadas().latitude - factor;
+        double lngmax = P.getCoordenadas().longitude + factor;
+        double lngmin = P.getCoordenadas().longitude - factor;
+
+        if (latmin <= mCurrentLocation.getLatitude()) return false;
+        if  (mCurrentLocation.getLatitude() >= latmax) return  false;
+        if (lngmin <= mCurrentLocation.getLongitude()) return false;
+        if (mCurrentLocation.getLongitude() >= lngmax) return false;
+
+        // Then, we are in the range
+        return true;
+
+    }
+
+
+    //-------------Listeers
+    private LocationListener mListener = new LocationListener() {
+        //New location event
+        @Override
+        public void onLocationChanged(Location location) {
+            mCurrentLocation = location;
+            //updateDisplay();
         }
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
-        // addGeofences() and removeGeofences().
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
+        //The requested provider was disabled in settings
+        @Override
+        public void onProviderDisabled(String provider) { }
+        //The requested provider was enabled in settings
+        @Override
+        public void onProviderEnabled(String provider) { }
+        //Availability changes in the requested provider
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
 
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+            Iterator<Punto> iterator = ArrayPuntos.iterator();
+            while (iterator.hasNext()) {
+                Punto P = iterator.next();
+                if(IsInside(P))
+                {
+                    Toast toast1 =
+                            Toast.makeText(getApplicationContext(),
+                                    "Entrando en:" + P.descripcion, Toast.LENGTH_SHORT);
 
-        // The INITIAL_TRIGGER_ENTER flag indicates that geofencing service should trigger a
-        // GEOFENCE_TRANSITION_ENTER notification when the geofence is added and if the device
-        // is already inside that geofence.
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+                    toast1.show();
 
-        // Add the geofences to be monitored by geofencing service.
-        builder.addGeofences(mGeofenceList);
+                }
 
-        // Return a GeofencingRequest.
-        return builder.build();
-    }
-
-    /**
-     * Adds geofences, which sets alerts to be notified when the device enters or exits one of the
-     * specified geofences. Handles the success or failure results returned by addGeofences().
-     */
-    public void addGeofencesButtonHandler() {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
+            }
         }
+    };
 
-        try {
-            LocationServices.GeofencingApi.addGeofences(
-                    mGoogleApiClient,
-                    // The GeofenceRequest object.
-                    getGeofencingRequest(),
-                    // A pending intent that that is reused when calling removeGeofences(). This
-                    // pending intent is used to generate an intent when a matched geofence
-                    // transition is observed.
-                    getGeofencePendingIntent()
-            ).setResultCallback(this); // Result processed in onResult().
-        } catch (SecurityException securityException) {
-            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-            logSecurityException(securityException);
-        }
-    }
 
-    /**
-     * Removes geofences, which stops further notifications when the device enters or exits
-     * previously registered geofences.
-     */
-    public void removeGeofences() {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            // Remove geofences.
-            LocationServices.GeofencingApi.removeGeofences(
-                    mGoogleApiClient,
-                    // This is the same pending intent that was used in addGeofences().
-                    getGeofencePendingIntent()
-            ).setResultCallback(this); // Result processed in onResult().
-        } catch (SecurityException securityException) {
-            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-            logSecurityException(securityException);
-        }
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-    }
-
-    private void logSecurityException(SecurityException securityException) {
-        Log.e(TAG, "Invalid location permission. " +
-                "You need to use ACCESS_FINE_LOCATION with geofences", securityException);
-    }
 }

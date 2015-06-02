@@ -22,7 +22,7 @@ public class Punto extends Activity {
     String uriFoto;
     String uriAudio;
     String descripcion;
-
+    int alcance;
     String categoria;
     LatLng coordenadas;
     boolean visitado;
@@ -36,6 +36,7 @@ public class Punto extends Activity {
         uriAudio = nArchivo + ".ogg";
         String uriDes = nArchivo + "txt";
         descripcion = LeerTxt(uriDes);
+        alcance = 10;
     }
     public Punto(){}
 
