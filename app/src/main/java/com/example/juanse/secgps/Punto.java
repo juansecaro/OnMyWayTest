@@ -1,6 +1,7 @@
 package com.example.juanse.secgps;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,15 +35,18 @@ public class Punto extends Activity {
         categoria = cat;
         uriFoto = nArchivo + ".png";
         uriAudio = nArchivo + ".ogg";
-        String uriDes = nArchivo + "txt";
+        String uriDes = nArchivo + ".txt";
         descripcion = LeerTxt(uriDes);
         alcance = 10;
+        visitado = false;
     }
     public Punto(){}
 
     public LatLng getCoordenadas(){return coordenadas;}
 
     public String LeerTxt(String rutaTxt) {
+        String final_route = Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/";
+        final_route = final_route + rutaTxt;
         String Aux = "";
         File archivo = null;
         FileReader fr = null;
@@ -51,7 +55,7 @@ public class Punto extends Activity {
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
             // hacer una lectura comoda (disponer del metodo readLine()).
-            archivo = new File(rutaTxt);
+            archivo = new File(final_route);
             fr = new FileReader(archivo);
             br = new BufferedReader(fr);
 
@@ -81,6 +85,8 @@ public class Punto extends Activity {
         setContentView(R.layout.punto);
         mPlay = (ImageButton) findViewById(R.id.bPlay);
         addButtonListener();
+        Intent i = getIntent();
+        //i.pu
 
     }
 

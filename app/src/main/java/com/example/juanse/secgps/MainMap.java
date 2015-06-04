@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -179,7 +178,19 @@ public class MainMap extends FragmentActivity {
         return inside;
     }
 
+  /*  protected void onActivityResult(int requestCode, int resultCode,Intent i) {
+        if (requestCode == 1)// Coincide con nuestra referencia con nuestra r {
 
+            if (resultCode== RESULT_CANCELED)  //Ha dado atras
+            {}
+            if (resultCode == RESULT_OK) {
+
+             //                   ArrayPuntos.get()
+            }
+        }
+    }
+
+*/
     //-------------Listeers
     private LocationListener mListener = new LocationListener() {
         //New location event
@@ -190,12 +201,9 @@ public class MainMap extends FragmentActivity {
             while (iterator.hasNext()) {
                 Punto P = iterator.next();
                 if (IsInside(P)) {
-                    Toast toast1 =
-                            Toast.makeText(getApplicationContext(),
-                                    "Entrando en:" + P.uriFoto, Toast.LENGTH_SHORT);
 
-                    toast1.show();
-
+                    Intent i = new Intent(getApplicationContext(), Punto.class);
+                    startActivityForResult(i,1);// 1 es un codigo dado con el que se identificaran entre ambas
 
                 }
 
