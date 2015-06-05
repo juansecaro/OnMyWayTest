@@ -198,9 +198,11 @@ public class MainMap extends FragmentActivity {
         public void onLocationChanged(Location location) {
             mCurrentLocation = location;  //marca de tiempo??
             Punto P;
+            int cont = 0;
             Iterator<Punto> iterator = ArrayPuntos.iterator();
             while (iterator.hasNext()) {
                 P = iterator.next();
+                cont ++;
                 if (!P.visitado) {
                     if (IsInside(P)) {
 
@@ -212,6 +214,8 @@ public class MainMap extends FragmentActivity {
                         //We update the current member of array as 'visited'
                         //iterator.next().visitado = true;
                         startActivity(i);//for result
+                        P.visitado = true;
+                        ArrayPuntos.set(cont,P);// Actualizamos array con los visitados
 
 
 

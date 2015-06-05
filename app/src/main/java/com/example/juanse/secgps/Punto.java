@@ -18,12 +18,11 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.Serializable;
 
 /**
  * Created by Juanse on 23/04/2015.
  */
-public class Punto extends Activity implements Serializable { // So we can pass objects between activities
+public class Punto extends Activity { // So we can pass objects between activities
     String uriFoto;
     String uriAudio;
     String descripcion;
@@ -159,7 +158,7 @@ public class Punto extends Activity implements Serializable { // So we can pass 
                 String A = final_route + uriAudio;
                 mPlayer = MediaPlayer.create(Punto.this, Uri.parse(final_route + uriAudio));
                 mPlayer.start();
-               /* mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                     @Override
                     public void onCompletion(MediaPlayer mp) {
@@ -167,7 +166,7 @@ public class Punto extends Activity implements Serializable { // So we can pass 
                         finish();
                     }
 
-                });*/
+                });
 
             } //
 
