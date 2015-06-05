@@ -215,7 +215,7 @@ public class MainMap extends FragmentActivity {
                         //iterator.next().visitado = true;
                         startActivity(i);//for result
                         P.visitado = true;
-                        ArrayPuntos.set(cont,P);// Actualizamos array con los visitados
+                        //ArrayPuntos.set(cont,P);// Actualizamos array con los visitados
 
 
 

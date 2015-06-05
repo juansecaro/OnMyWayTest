@@ -157,7 +157,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
                 mPlayer.start();*/
                 String A = final_route + uriAudio;
                 mPlayer = MediaPlayer.create(Punto.this, Uri.parse(final_route + uriAudio));
-                mPlayer.start();
+
                 mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
                     @Override
@@ -167,7 +167,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
                     }
 
                 });
-
+                mPlayer.start();
             } //
 
         });
