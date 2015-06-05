@@ -196,19 +196,29 @@ public class MainMap extends FragmentActivity {
         //New location event
         @Override
         public void onLocationChanged(Location location) {
-            mCurrentLocation = location;
+            mCurrentLocation = location;  //marca de tiempo??
+            Punto P;
             Iterator<Punto> iterator = ArrayPuntos.iterator();
             while (iterator.hasNext()) {
-                Punto P = iterator.next();
-                if (IsInside(P)) {
+                P = iterator.next();
+                if (!P.visitado) {
+                    if (IsInside(P)) {
 
-                    Intent i = new Intent(getApplicationContext(), Punto.class);
-                    startActivityForResult(i,1);// 1 es un codigo dado con el que se identificaran entre ambas
+                        Intent i = new Intent(getApplicationContext(), Punto.class);
 
+                        i.putExtra("uriFoto", P.uriFoto);
+                        i.putExtra("uriAudio", P.uriAudio);
+                        i.putExtra("descripcion", P.descripcion);
+                        //We update the current member of array as 'visited'
+                        //iterator.next().visitado = true;
+                        startActivity(i);//for result
+
+
+
+                    }
                 }
-
             }
-            //updateDisplay();
+
         }
 
         //The requested provider was disabled in settings

@@ -1,13 +1,16 @@
 package com.example.juanse.secgps;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -15,11 +18,12 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.Serializable;
 
 /**
  * Created by Juanse on 23/04/2015.
  */
-public class Punto extends Activity {
+public class Punto extends Activity implements Serializable { // So we can pass objects between activities
     String uriFoto;
     String uriAudio;
     String descripcion;
@@ -29,6 +33,9 @@ public class Punto extends Activity {
     boolean visitado;
     private ImageButton mPlay;
     private MediaPlayer mPlayer;
+    String final_route = Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/";
+    TextView txtCambiado;
+    ImageView frontal;
 
     public Punto(LatLng coor, String cat, int nArchivo) {
         coordenadas = coor;
@@ -45,7 +52,7 @@ public class Punto extends Activity {
     public LatLng getCoordenadas(){return coordenadas;}
 
     public String LeerTxt(String rutaTxt) {
-        String final_route = Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/";
+
         final_route = final_route + rutaTxt;
         String Aux = "";
         File archivo = null;
@@ -83,12 +90,31 @@ public class Punto extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.punto);
+        //-- Recuperamos información específica del Intent
+        Bundle extras = getIntent().getExtras();
+        uriFoto = extras.getString("uriFoto");
+        uriAudio = extras.getString("uriAudio");
+        descripcion = extras.getString("descripcion");
+
+
+        txtCambiado = (TextView)findViewById(R.id.panel);
+        txtCambiado.setText(descripcion);
+
+        frontal = (ImageView)findViewById(R.id.foto);
+        Bitmap bitmap = BitmapFactory.decodeFile(final_route+uriFoto);
+        frontal.setImageBitmap(bitmap);
+
+
+
+
+
+
+        visitado = true; // Once it's inflate, then it's visited
         mPlay = (ImageButton) findViewById(R.id.bPlay);
         addButtonListener();
-        Intent i = getIntent();
-        //i.pu
 
     }
+
 
     @Override
     public void onDestroy() {
@@ -127,9 +153,21 @@ public class Punto extends Activity {
             public void onClick(View view) {
 
                 Toast.makeText(Punto.this, "ImageButton is working!", Toast.LENGTH_SHORT).show();
-                mPlayer = MediaPlayer.create(Punto.this,
+               /* mPlayer = MediaPlayer.create(Punto.this,
                         Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/1.ogg"));
+                mPlayer.start();*/
+                String A = final_route + uriAudio;
+                mPlayer = MediaPlayer.create(Punto.this, Uri.parse(final_route + uriAudio));
                 mPlayer.start();
+               /* mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.release();
+                        finish();
+                    }
+
+                });*/
 
             } //
 
