@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 
@@ -197,24 +198,27 @@ public class MainMap extends FragmentActivity {
         @Override
         public void onLocationChanged(Location location) {
             mCurrentLocation = location;  //marca de tiempo??
-            Punto Paux;
+            Punto P;
             int cont = 0; // para ver posiciones en el array
             Iterator<Punto> iterator = ArrayPuntos.iterator();
             while (iterator.hasNext()) {
 
-                Paux = iterator.next();
+                P = iterator.next();
 
-                if (!Paux.visitado) { // Si ya ha sido cargado, nada (al principio todos falsos)
-                    if (IsInside(Paux)) {// Es nuestro punto
+                if (!P.visitado) { // Si ya ha sido cargado, nada (al principio todos falsos)
+                    if (IsInside(P)) {// Es nuestro punto
 
                         Intent i = new Intent(getApplicationContext(), Punto.class);
-                        i.putExtra("uriFoto", Paux.uriFoto);
-                        i.putExtra("uriAudio", Paux.uriAudio);
-                        i.putExtra("descripcion", Paux.descripcion);
-                        Paux.setVisitado();
-                        ArrayPuntos.set(cont,Paux); //actualizamos el item
-                        startActivity(i);//for result
-
+                        i.putExtra("uriFoto", P.uriFoto);
+                        i.putExtra("uriAudio", P.uriAudio);
+                        i.putExtra("descripcion", P.descripcion);
+                        P.setVisitado();
+                        ArrayPuntos.set(cont,P); //actualizamos el item como visitado
+                        // Avisamos de algo nuevo
+                        Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                        v.vibrate(500);
+                        // Mostramos el punto
+                        startActivity(i);
 
                     }
                 }

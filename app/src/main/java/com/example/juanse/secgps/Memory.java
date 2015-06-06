@@ -42,6 +42,12 @@ public class Memory {
         return ArrayPuntos;
     }
 
-    public boolean ToCSV(ArrayList<Punto> Array){return true;}
+    public boolean ToCSV(ArrayList<Punto> Array){
+
+
+
+
+        return true;
+    }
 
 }
