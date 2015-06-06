@@ -46,8 +46,18 @@ public class Punto extends Activity { // So we can pass objects between activiti
         alcance = 10;
         visitado = false;
     }
-    public Punto(){}
+    public Punto()
+    {
+        coordenadas = null;
+        categoria = "";
+        uriFoto ="";
+        uriAudio = "";
+        descripcion ="";
+        visitado = false;
+        alcance = 10;
+    }
 
+    public void setVisitado(){ visitado = true;}
     public LatLng getCoordenadas(){return coordenadas;}
 
     public String LeerTxt(String rutaTxt) {

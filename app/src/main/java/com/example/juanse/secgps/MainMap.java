@@ -197,30 +197,34 @@ public class MainMap extends FragmentActivity {
         @Override
         public void onLocationChanged(Location location) {
             mCurrentLocation = location;  //marca de tiempo??
-            Punto P;
-            int cont = 0;
+            Punto Paux;
+            int cont = 0; // para ver posiciones en el array
             Iterator<Punto> iterator = ArrayPuntos.iterator();
             while (iterator.hasNext()) {
-                P = iterator.next();
-                cont ++;
-                if (!P.visitado) {
-                    if (IsInside(P)) {
+
+                Paux = iterator.next();
+
+                if (!Paux.visitado) { // Si ya ha sido cargado, nada (al principio todos falsos)
+                    if (IsInside(Paux)) {// Es nuestro punto
 
                         Intent i = new Intent(getApplicationContext(), Punto.class);
-
-                        i.putExtra("uriFoto", P.uriFoto);
-                        i.putExtra("uriAudio", P.uriAudio);
-                        i.putExtra("descripcion", P.descripcion);
-                        //We update the current member of array as 'visited'
-                        //iterator.next().visitado = true;
+                        i.putExtra("uriFoto", Paux.uriFoto);
+                        i.putExtra("uriAudio", Paux.uriAudio);
+                        i.putExtra("descripcion", Paux.descripcion);
+                        Paux.setVisitado();
+                        ArrayPuntos.set(cont,Paux); //actualizamos el item
                         startActivity(i);//for result
-                        P.visitado = true;
-                        //ArrayPuntos.set(cont,P);// Actualizamos array con los visitados
-
 
 
                     }
                 }
+                cont++;//Para llevar control de la pos
+            }
+
+            try {
+                Thread.sleep(100); //Ayuda a no sobrecargar la aplicación y dar más fluidez al mapa
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
         }
