@@ -217,6 +217,8 @@ public class MainMap extends FragmentActivity {
                         // Avisamos de algo nuevo
                         Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                         v.vibrate(500);
+                        //redibujamos el mapa
+
                         // Mostramos el punto
                         startActivity(i);
 

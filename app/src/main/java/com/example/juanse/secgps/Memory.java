@@ -2,10 +2,13 @@ package com.example.juanse.secgps;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Juanse on 16/05/2015.
@@ -42,7 +45,23 @@ public class Memory {
         return ArrayPuntos;
     }
 
-    public boolean ToCSV(ArrayList<Punto> Array){
+    public boolean ToCSV(ArrayList<Punto> ArrayPuntos)throws IOException{
+        CSVWriter writer = new CSVWriter(new FileWriter("index.csv"));//falta el absolute path
+
+        String[] entries = new String[4]; //
+        Iterator<Punto> iterator = ArrayPuntos.iterator();
+        while (iterator.hasNext()) {
+            Punto P = iterator.next();
+            LatLng L = P.getCoordenadas();
+            entries[0] =  String.valueOf(L.latitude);
+            entries[1] =  String.valueOf(L.longitude);
+            entries[2] = P.descripcion;
+            entries[3] = P.categoria;
+            entries[4] = P.uriAudio.substring(0,1);//Cojo solo el primer caracter, que es el numero
+
+            writer.writeNext(entries);
+        }
+
 
 
 

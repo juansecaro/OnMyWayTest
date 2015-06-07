@@ -37,7 +37,7 @@ public class MainActivity extends ListActivity {
                         i = new Intent(getApplicationContext(), DescargaCiudad.class);
                         startActivity(i);
                         break;
-                    case 1: //Continuar
+                    case 1: //Continuar // No bajamos, chequeaos los archivos existentes y ejecutamos sobre ellos
                         break;
                     case 2: //Logros
                         break;
