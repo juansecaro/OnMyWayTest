@@ -1,5 +1,7 @@
 package com.example.juanse.secgps;
 
+import android.os.Environment;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
@@ -27,6 +29,7 @@ public class Memory {
         String categoria;
         int fileName;
 
+
         while ((nextLine = reader.readNext()) != null) {
             // nextLine[] is an array of values from the line
             Paux = nextLine[0];
@@ -37,18 +40,23 @@ public class Memory {
             text = nextLine[2];// texto recurrente
             categoria = nextLine[3];
             fileName = Integer.parseInt(nextLine[4]);
+
+
             //declaro punto e inserto
             Punto punto = new Punto(coord, categoria, fileName);
+            if (categoria.equals("VIS")){
+                punto.setVisitado();}
             ArrayPuntos.add(punto);
 
         }
         return ArrayPuntos;
     }
 
-    public boolean ToCSV(ArrayList<Punto> ArrayPuntos)throws IOException{
-        CSVWriter writer = new CSVWriter(new FileWriter("index.csv"));//falta el absolute path
+    public void ToCSV(ArrayList<Punto> ArrayPuntos)throws IOException{
+        CSVWriter writer = new CSVWriter(new FileWriter(
+                Environment.getExternalStorageDirectory() + "/omw/zipSample/index.csv"));//falta el absolute path
 
-        String[] entries = new String[4]; //
+        String[] entries = new String[5]; //
         Iterator<Punto> iterator = ArrayPuntos.iterator();
         while (iterator.hasNext()) {
             Punto P = iterator.next();
@@ -61,12 +69,7 @@ public class Memory {
 
             writer.writeNext(entries);
         }
-
-
-
-
-
-        return true;
+        writer.close();
     }
 
 }

@@ -31,6 +31,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
     LatLng coordenadas;
     boolean visitado;
     private ImageButton mPlay;
+    private  ImageButton menu;
     private MediaPlayer mPlayer;
     String final_route = Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/";
     TextView txtCambiado;
@@ -120,6 +121,8 @@ public class Punto extends Activity { // So we can pass objects between activiti
 
         visitado = true; // Once it's inflate, then it's visited
         mPlay = (ImageButton) findViewById(R.id.bPlay);
+        menu = (ImageButton) findViewById(R.id.menu);
+
         addButtonListener();
 
     }
@@ -153,7 +156,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
 
     public void addButtonListener() {
 
-        mPlay = (ImageButton) findViewById(R.id.bPlay);
+        //mPlay = (ImageButton) findViewById(R.id.bPlay);
 
         mPlay.setOnClickListener(new View.OnClickListener() {
 
@@ -180,6 +183,12 @@ public class Punto extends Activity { // So we can pass objects between activiti
                 mPlayer.start();
             } //
 
+        });
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
         });
 
     }

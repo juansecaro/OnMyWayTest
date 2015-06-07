@@ -17,7 +17,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -35,6 +34,7 @@ public class MainMap extends FragmentActivity {
     float ORANGE = BitmapDescriptorFactory.HUE_ORANGE; // Historico
     float YELLOW = BitmapDescriptorFactory.HUE_YELLOW; // Curioso
     float GREEN = BitmapDescriptorFactory.HUE_GREEN; // Gangas (Bargains)
+    float BLUE = BitmapDescriptorFactory.HUE_BLUE; // Visitado
 
     private GoogleMap mMap;
     private LocationManager mManager;
@@ -48,50 +48,13 @@ public class MainMap extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmap);
         mManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mainnmap)).getMap();
-        LatLng L;
+        drawMap();
 
-
-        try {
-            ArrayPuntos = Mem.FromCsv(ruta);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Iterator<Punto> iterator = ArrayPuntos.iterator();
-        while (iterator.hasNext()) {
-            Punto P = iterator.next();
-            switch (P.categoria) //Dibujamos segun tipo de punto
-            {
-                case "HIS":
-                    mMap.addMarker(new MarkerOptions()
-                            .position(P.getCoordenadas())
-                            .icon(BitmapDescriptorFactory.defaultMarker(ORANGE)));
-                    break;
-                case "CUR":
-                    mMap.addMarker(new MarkerOptions()
-                            .position(P.getCoordenadas())
-                            .icon(BitmapDescriptorFactory.defaultMarker(YELLOW)));
-                    break;
-                case "BAR":
-                    mMap.addMarker(new MarkerOptions()
-                            .position(P.getCoordenadas())
-                            .icon(BitmapDescriptorFactory.defaultMarker(GREEN)));
-                    break;
-                default:
-                    mMap.addMarker(new MarkerOptions()
-                            .position(P.getCoordenadas())
-                            .icon(BitmapDescriptorFactory.defaultMarker(RED)));
-                    break;
-            }
-            // Creamos Geofence de dicho punto
-
-        }
-        mMap.setMyLocationEnabled(true);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las ultimas coordenadas y con zoom de 10
     }
 
     @Override
@@ -134,6 +97,59 @@ public class MainMap extends FragmentActivity {
         //Disable updates when we are not in the foreground
         // mManager.removeUpdates(mListener);
     }
+    public void drawMap()
+    {
+
+        try {
+            ArrayPuntos = Mem.FromCsv(ruta);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Iterator<Punto> iterator = ArrayPuntos.iterator();
+        while (iterator.hasNext()) {
+            Punto P = iterator.next();
+            switch (P.categoria) //Dibujamos segun tipo de punto
+            {
+                case "HIS":
+                    mMap.addMarker(new MarkerOptions()
+                            .position(P.getCoordenadas())
+                            .icon(BitmapDescriptorFactory.defaultMarker(ORANGE)));
+                    break;
+                case "CUR":
+                    mMap.addMarker(new MarkerOptions()
+                            .position(P.getCoordenadas())
+                            .icon(BitmapDescriptorFactory.defaultMarker(YELLOW)));
+                    break;
+                case "BAR":
+                    mMap.addMarker(new MarkerOptions()
+                            .position(P.getCoordenadas())
+                            .icon(BitmapDescriptorFactory.defaultMarker(GREEN)));
+                    break;
+                case "VIS":
+                    mMap.addMarker(new MarkerOptions()
+                        .position(P.getCoordenadas())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BLUE)));
+                    break;
+
+                default:// TURISTICO
+                    mMap.addMarker(new MarkerOptions()
+                            .position(P.getCoordenadas())
+                            .icon(BitmapDescriptorFactory.defaultMarker(RED)));
+                    break;
+            }
+
+
+        }
+        mMap.setMyLocationEnabled(true);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las ultimas coordenadas y con zoom de 10
+
+
+
+
+    }
+
+
 
     /**
      * Vamos a establecer un cuadrante en base a un punto, siendo este el centro del mismo
@@ -179,19 +195,6 @@ public class MainMap extends FragmentActivity {
         return inside;
     }
 
-  /*  protected void onActivityResult(int requestCode, int resultCode,Intent i) {
-        if (requestCode == 1)// Coincide con nuestra referencia con nuestra r {
-
-            if (resultCode== RESULT_CANCELED)  //Ha dado atras
-            {}
-            if (resultCode == RESULT_OK) {
-
-             //                   ArrayPuntos.get()
-            }
-        }
-    }
-
-*/
     //-------------Listeers
     private LocationListener mListener = new LocationListener() {
         //New location event
@@ -213,12 +216,19 @@ public class MainMap extends FragmentActivity {
                         i.putExtra("uriAudio", P.uriAudio);
                         i.putExtra("descripcion", P.descripcion);
                         P.setVisitado();
+                        P.categoria = "VIS";
                         ArrayPuntos.set(cont,P); //actualizamos el item como visitado
+                        try {
+                            Mem.ToCSV(ArrayPuntos);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         // Avisamos de algo nuevo
                         Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
                         v.vibrate(500);
-                        //redibujamos el mapa
-
+                        //redibujamos el mapa con los visitados
+                        mMap.clear();
+                        drawMap();//¿Dónde actualizamos el CVS?
                         // Mostramos el punto
                         startActivity(i);
 
