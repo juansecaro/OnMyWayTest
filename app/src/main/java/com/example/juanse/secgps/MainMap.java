@@ -228,7 +228,8 @@ public class MainMap extends FragmentActivity {
                         v.vibrate(500);
                         //redibujamos el mapa con los visitados
                         mMap.clear();
-                        drawMap();//¿Dónde actualizamos el CVS?
+                        drawMap();
+
                         // Mostramos el punto
                         startActivity(i);
 
@@ -238,7 +239,7 @@ public class MainMap extends FragmentActivity {
             }
 
             try {
-                Thread.sleep(100); //Ayuda a no sobrecargar la aplicación y dar más fluidez al mapa
+                Thread.sleep(400); //Ayuda a no sobrecargar la aplicación y dar más fluidez al mapa
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

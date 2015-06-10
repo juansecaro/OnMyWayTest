@@ -19,6 +19,7 @@
     <string name="geofences_added">geofences_added</string>
     <string name="No">No</string>
     <string name="Yes">Sí</string>
+    <string name="not_previous_route">No hay en el sistema ninguna ruta anterior, ¿Desea crear una?</string>
 
 
 </resources>
