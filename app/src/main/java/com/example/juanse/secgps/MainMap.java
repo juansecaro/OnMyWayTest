@@ -1,5 +1,6 @@
 package com.example.juanse.secgps;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,7 +26,7 @@ import java.util.Iterator;
 /**
  * Created by Juanse on 17/05/2015.
  */
-public class MainMap extends FragmentActivity {
+public class MainMap extends Activity {
 
     protected static final String TAG = "MainMap";
 
