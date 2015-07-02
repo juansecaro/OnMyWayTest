@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.ImageView;
 
 import net.lingala.zip4j.core.ZipFile;
 
@@ -19,19 +18,12 @@ public class DescargaCiudad extends Activity {
     private static final String DL_ID = "downloadId";
     private SharedPreferences prefs;
     private DownloadManager dm;
-    private ImageView imageView;
-
-
-
-
-
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        imageView = new ImageView(this);
-        setContentView(imageView);
+
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -50,7 +42,7 @@ public class DescargaCiudad extends Activity {
             request.setAllowedOverRoaming(false);
 //Finding a place to be saved
 
-            request.setDestinationInExternalPublicDir("/omw", "zipSample1.zip");
+            request.setDestinationInExternalPublicDir("/omw", "zipSample.zip");
 
 //Display in the notification bar
             request.setTitle("Download Sample");
@@ -95,7 +87,7 @@ public class DescargaCiudad extends Activity {
 //Done, display the image
                     try {
                         //bajado con e
-                        String ZipFileLocation = "/sdcard/omw/zipSample1.zip";
+                        String ZipFileLocation = "/sdcard/omw/zipSample.zip";
                         String unzipLocation = "/sdcard/omw/";
 
 

@@ -3,10 +3,8 @@
     <string-array name="adobe_products">
         <item>Nuevo Tour</item>
         <item>Continuar</item>
-        <item>Logros</item>
         <item>Configuraciones</item>
-        <item>Perfil</item>
+        <item>Logros</item>
         <item>Novedades</item>
-        <item>Ayuda</item>
     </string-array>
 </resources>

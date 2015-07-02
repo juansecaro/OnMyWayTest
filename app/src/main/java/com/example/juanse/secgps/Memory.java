@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Juanse on 16/05/2015.
@@ -52,7 +53,7 @@ public class Memory {
         return ArrayPuntos;
     }
 
-    public void ToCSV(ArrayList<Punto> ArrayPuntos)throws IOException{
+    public void ToCSV(List<Punto> ArrayPuntos)throws IOException{
         CSVWriter writer = new CSVWriter(new FileWriter(
                 Environment.getExternalStorageDirectory() + "/omw/zipSample/index.csv"));//falta el absolute path
 

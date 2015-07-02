@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@drawable/fondo_punto"
+    android:id="@+id/Puntox">
 
 
 
 
     <ImageView
-        android:layout_marginRight="2dp"
-        android:layout_marginLeft="2dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/foto"
-        android:src="@mipmap/ic_launcher"
-        android:layout_marginTop="144dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:src="@drawable/plaza"
+        android:layout_below="@+id/vistos"
+        android:layout_toLeftOf="@+id/vistos"
+        android:layout_toStartOf="@+id/vistos"
+        android:layout_marginTop="55dip"
+        android:layout_marginLeft="65dip"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="XXX / XXX"
+        android:text="2 / 4"
         android:id="@+id/vistos"
+        android:textColor="#FFFFFF"
         android:textSize="@dimen/abc_action_bar_progress_bar_size"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -35,13 +38,12 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/descripcion"
+        android:textColor="#FFFFFF"
         android:id="@+id/panel"
-        android:layout_below="@+id/foto"
-        android:layout_marginTop="59dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/imageButton"
+        android:layout_alignRight="@+id/imageButton3"
+        android:layout_alignEnd="@+id/imageButton3"
+        android:layout_marginBottom="104dp" />
 
     <ImageButton
         android:layout_width="wrap_content"

@@ -31,6 +31,8 @@
         </activity>
         <activity android:name=".Novedades"> </activity>
         <activity android:name=".DescargaCiudad"> </activity>
+        <activity android:name=".Descarga"> </activity>
+        <activity android:name=".Logros"> </activity>
         <activity
             android:name=".Punto"
             android:launchMode="singleInstance"> </activity>

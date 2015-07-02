@@ -35,24 +35,23 @@ public class MainActivity extends ListActivity {
                 String selection = (String) parent.getItemAtPosition(position);
                 switch (position) {
                     case 0: //Nuevo Tour //lo descargamos
-                        i = new Intent(getApplicationContext(), DescargaCiudad.class);
+                        i = new Intent(getApplicationContext(), Descarga.class);
                         startActivity(i);
                         break;
                     case 1: //Continuar // No bajamos, chequeaos los archivos existentes y ejecutamos sobre ellos
 
                         break;
-                    case 2: //Logros
+                    case 2: //Configuraciones
                         break;
-                    case 3: //Configuraciones
+                    case 3: //Logros
+                        i = new Intent(getApplicationContext(), Logros.class);
+                        startActivity(i);
                         break;
-                    case 4: //Perfil
-                        break;
-                    case 5: //Novedades
+                    case 4: //Novedades
                         i = new Intent(getApplicationContext(), Novedades.class);
                         startActivity(i);
                         break;
-                    case 6: //Ayuda
-                        break;
+
 
                 }
 

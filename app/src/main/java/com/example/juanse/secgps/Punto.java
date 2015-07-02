@@ -1,12 +1,14 @@
 package com.example.juanse.secgps;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -16,8 +18,11 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Created by Juanse on 23/04/2015.
@@ -37,6 +42,8 @@ public class Punto extends Activity { // So we can pass objects between activiti
     TextView txtCambiado;
     ImageView frontal;
 
+    File file = new File(final_route+"ChochosRicos.txt");
+
     public Punto(LatLng coor, String cat, int nArchivo) {
         coordenadas = coor;
         categoria = cat;
@@ -47,6 +54,17 @@ public class Punto extends Activity { // So we can pass objects between activiti
         alcance = 10;
         visitado = false;
     }
+
+    public Punto(Punto _P) {
+        coordenadas = _P.coordenadas;
+        categoria = _P.categoria;
+        uriFoto = _P.uriFoto;
+        uriAudio = _P.uriAudio;
+        descripcion = _P.descripcion;
+        alcance = _P.alcance;
+        visitado = _P.visitado;
+    }
+
     public Punto()
     {
         coordenadas = null;
@@ -55,7 +73,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
         uriAudio = "";
         descripcion ="";
         visitado = false;
-        alcance = 10;
+        alcance = 25;
     }
 
     public void setVisitado(){ visitado = true;}
@@ -113,7 +131,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
         frontal = (ImageView)findViewById(R.id.foto);
         Bitmap bitmap = BitmapFactory.decodeFile(final_route+uriFoto);
         frontal.setImageBitmap(bitmap);
-
+        Log.i("PUNTO", "Entrando");
 
 
 
@@ -125,6 +143,8 @@ public class Punto extends Activity { // So we can pass objects between activiti
 
         addButtonListener();
 
+
+
     }
 
 
@@ -134,6 +154,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
         if (mPlayer != null) {
             mPlayer.release();
         }
+        Log.i("PUNTO","Saliendo");
     }
 
     //OnCompletionListener Methods
@@ -176,6 +197,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         mp.release();
+                        writeFilePuta();
                         finish();
                     }
 
@@ -193,5 +215,14 @@ public class Punto extends Activity { // So we can pass objects between activiti
 
     }
 
+    protected void writeFilePuta(){
+        try{
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("1");
+            bw.close();
+        }
+        catch (IOException e){}
+    }
 
 }
