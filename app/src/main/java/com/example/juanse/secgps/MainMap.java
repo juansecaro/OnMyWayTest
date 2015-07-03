@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 /**
  * Created by Juanse on 17/05/2015.
@@ -51,9 +50,6 @@ public class MainMap extends Activity {
     private GoogleMap mMap;
     private LocationManager mManager;
     private Location mCurrentLocation;
-    private Semaphore s = new Semaphore(1);
-
-    private boolean stopActivity = true;
 
     String ruta = Environment.getExternalStorageDirectory() + "/omw/zipSample/";
 
@@ -62,21 +58,22 @@ public class MainMap extends Activity {
 
     Memory Mem = new Memory();
 
-    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/"+"ChochosRicos.txt");
+    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/" + "trans.txt");
 
     public static GoogleAnalytics analytics;
     public static Tracker tracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
-            analytics = GoogleAnalytics.getInstance(this);
-            analytics.setLocalDispatchPeriod(1800);
+        analytics = GoogleAnalytics.getInstance(this);
+        analytics.setLocalDispatchPeriod(1800);
 
-            tracker = analytics.newTracker("Incio actividad principal");
-            tracker.enableExceptionReporting(true);
-            tracker.enableAdvertisingIdCollection(true);
-            tracker.enableAutoActivityTracking(true);
+        tracker = analytics.newTracker("Incio actividad principal");
+        tracker.enableExceptionReporting(true);
+        tracker.enableAdvertisingIdCollection(true);
+        tracker.enableAutoActivityTracking(true);
 
 
         super.onCreate(savedInstanceState);
@@ -86,19 +83,19 @@ public class MainMap extends Activity {
         drawMap();
 
 
-        try{
-        // if file doesnt exists, then create it
-        if (!file.exists()) {
-            file.createNewFile();
-        }
+        try {
+            //Creamos el archivo que utilizaremos para bloquear la carga de puntos
+            if (!file.exists()) {
+                file.createNewFile();
+            }
 
-        FileWriter fw = new FileWriter(file.getAbsoluteFile());
-        BufferedWriter bw = new BufferedWriter(fw);
-        bw.write("1");
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("1");
 
-        bw.close();
+            bw.close();
+        } catch (IOException e) {
         }
-        catch (IOException e){}
 
         FragmentManager fm = getFragmentManager();
 
@@ -151,8 +148,8 @@ public class MainMap extends Activity {
         //Disable updates when we are not in the foreground
         // mManager.removeUpdates(mListener);
     }
-    public void drawMap()
-    {
+
+    public void drawMap() {
 
         try {
             ArrayPuntos = Mem.FromCsv(ruta);
@@ -182,8 +179,8 @@ public class MainMap extends Activity {
                     break;
                 case "VIS":
                     mMap.addMarker(new MarkerOptions()
-                        .position(P.getCoordenadas())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BLUE)));
+                            .position(P.getCoordenadas())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BLUE)));
                     break;
 
                 default:// TURISTICO
@@ -199,10 +196,7 @@ public class MainMap extends Activity {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(ArrayPuntos.get(0).getCoordenadas(), 13)); //centro el mapa en las ultimas coordenadas y con zoom de 10
 
 
-
-
     }
-
 
 
     /**
@@ -251,11 +245,12 @@ public class MainMap extends Activity {
 
     /**
      * Calcula distancias en el centro de dos puntos en conflicto
+     *
      * @param lat1 latitud
      * @param lat2
      * @param lon1 longitud
      * @param lon2
-     * @param el1 altura
+     * @param el1  altura
      * @param el2
      * @return Valor con la distancia más corta
      */
@@ -285,19 +280,19 @@ public class MainMap extends Activity {
         @Override
         public void onLocationChanged(Location location) {
 
-            if (readKeyFile()) {
-                writeKeyFile();
+            if (accesoLibre()) {
+
 
                 mCurrentLocation = location;  //marca de tiempo??
                 Punto P;
                 Punto P_2 = null;
                 double distanceNow = 0.0;
                 double distanceMin = 0.0;
-                boolean findPoint = false;
+                boolean foundPoint = false;
                 int cont = 0; // para ver posiciones en el array
                 int contFin = 0;
 
-
+                bloquearAcceso();
                 Iterator<Punto> iterator = ArrayPuntos.iterator();
                 while (iterator.hasNext()) {
 
@@ -305,7 +300,7 @@ public class MainMap extends Activity {
 
                     if (!P.visitado) { // Si ya ha sido cargado, nada (al principio todos falsos)
                         if (IsInside(P)) {// Es nuestro punto
-                            findPoint = true;
+                            foundPoint = true;
                             if (P_2 == null) {
                                 distanceMin = distance(P.coordenadas.latitude, mCurrentLocation.getLatitude(), P.coordenadas.longitude, mCurrentLocation.getLongitude(), 0, 0);
                                 P_2 = new Punto(P);
@@ -323,16 +318,12 @@ public class MainMap extends Activity {
                     cont++;//Para llevar control de la pos
                 }
 
-                if (findPoint) {
+                if (foundPoint) {
 
                     Intent i = new Intent(getApplicationContext(), Punto.class);
                     i.putExtra("uriFoto", P_2.uriFoto);
                     i.putExtra("uriAudio", P_2.uriAudio);
                     i.putExtra("descripcion", P_2.descripcion);
-                /*P_2.setVisitado();
-                P_2.categoria = "VIS";
-                ArrayPuntos.set(contFin-1,P_2); //actualizamos el item como visitado*/
-
 
                     ArrayPuntos.get(contFin - 1).setVisitado();
                     ArrayPuntos.get(contFin - 1).categoria = "VIS";
@@ -350,10 +341,12 @@ public class MainMap extends Activity {
                     mMap.clear();
                     drawMap();
 
-                    stopActivity = false;
                     // Mostramos el punto
                     startActivity(i);
 
+                }
+                else{
+                    desbloquearAcceso();
                 }
                 try {
                     Thread.sleep(400); //Ayuda a no sobrecargar la aplicación y dar más fluidez al mapa
@@ -365,26 +358,41 @@ public class MainMap extends Activity {
 
         }
 
-        protected void writeKeyFile(){
-            try{
+        protected void bloquearAcceso() {
+            try {
                 FileWriter fw = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter bw = new BufferedWriter(fw);
                 bw.write("0");
                 bw.close();
+            } catch (IOException e) {
             }
-            catch (IOException e){}
-         }
+        }
+        protected void desbloquearAcceso() {
+            try {
+                FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write("1");
+                bw.close();
+            } catch (IOException e) {
+            }
+        }
 
-        protected boolean readKeyFile(){
+        /**
+         *
+         * @return
+         */
+        protected boolean accesoLibre() {//Si 1, via libre; 0, bloqueado
             try {
                 FileReader fr = new FileReader(file.getAbsoluteFile());
                 BufferedReader br = new BufferedReader(fr);
-                if (br.readLine().equals("1")){
+                if (br.readLine().equals("1")) {
                     return true;
                 }
+            } catch (FileNotFoundException e) {
+                return false;
+            } catch (IOException e) {
+                return false;
             }
-            catch (FileNotFoundException e){ return false;}
-            catch (IOException e){ return false;}
             return false;
         }
 

@@ -1,7 +1,6 @@
 package com.example.juanse.secgps;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -27,7 +26,7 @@ import java.io.IOException;
 /**
  * Created by Juanse on 23/04/2015.
  */
-public class Punto extends Activity { // So we can pass objects between activities
+public class Punto extends Activity {
     String uriFoto;
     String uriAudio;
     String descripcion;
@@ -42,7 +41,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
     TextView txtCambiado;
     ImageView frontal;
 
-    File file = new File(final_route+"ChochosRicos.txt");
+    File file = new File(final_route+"trans.txt"); //fichero de transferencia de informacion entre actividades
 
     public Punto(LatLng coor, String cat, int nArchivo) {
         coordenadas = coor;
@@ -51,7 +50,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
         uriAudio = nArchivo + ".ogg";
         String uriDes = nArchivo + ".txt";
         descripcion = LeerTxt(uriDes);
-        alcance = 10;
+        alcance = 30;
         visitado = false;
     }
 
@@ -73,7 +72,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
         uriAudio = "";
         descripcion ="";
         visitado = false;
-        alcance = 25;
+        alcance = 30;
     }
 
     public void setVisitado(){ visitado = true;}
@@ -133,17 +132,11 @@ public class Punto extends Activity { // So we can pass objects between activiti
         frontal.setImageBitmap(bitmap);
         Log.i("PUNTO", "Entrando");
 
-
-
-
-
         visitado = true; // Once it's inflate, then it's visited
         mPlay = (ImageButton) findViewById(R.id.bPlay);
         menu = (ImageButton) findViewById(R.id.menu);
 
         addButtonListener();
-
-
 
     }
 
@@ -157,27 +150,9 @@ public class Punto extends Activity { // So we can pass objects between activiti
         Log.i("PUNTO","Saliendo");
     }
 
-    //OnCompletionListener Methods
-
-
-    /*  public cargarDatosEnPantalla()
-      {
-          // Imagen
-
-          // Descripción
-
-          // Sonido
-
-
-      }*/
-    public void Audio() {
-
-
-    }
 
     public void addButtonListener() {
 
-        //mPlay = (ImageButton) findViewById(R.id.bPlay);
 
         mPlay.setOnClickListener(new View.OnClickListener() {
 
@@ -186,10 +161,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
             public void onClick(View view) {
 
                 Toast.makeText(Punto.this, "ImageButton is working!", Toast.LENGTH_SHORT).show();
-               /* mPlayer = MediaPlayer.create(Punto.this,
-                        Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/omw/zipSample/1.ogg"));
-                mPlayer.start();*/
-                String A = final_route + uriAudio;
+
                 mPlayer = MediaPlayer.create(Punto.this, Uri.parse(final_route + uriAudio));
 
                 mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -197,7 +169,7 @@ public class Punto extends Activity { // So we can pass objects between activiti
                     @Override
                     public void onCompletion(MediaPlayer mp) {
                         mp.release();
-                        writeFilePuta();
+                        liberarAcceso();
                         finish();
                     }
 
@@ -210,12 +182,13 @@ public class Punto extends Activity { // So we can pass objects between activiti
             @Override
             public void onClick(View v) {
                 finish();
+                liberarAcceso();
             }
         });
 
     }
 
-    protected void writeFilePuta(){
+    protected void liberarAcceso(){
         try{
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);

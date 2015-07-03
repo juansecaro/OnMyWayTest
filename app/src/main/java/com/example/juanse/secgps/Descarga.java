@@ -16,16 +16,13 @@ import android.widget.ImageView;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
 /**
  * Created by Juanse on 27/06/2015.
  */
 
     public class Descarga extends Activity {
-        private SecureRandom random = new SecureRandom();
-        private  final String DL_ID = new BigInteger(130, random).toString(32);
+
+        private  final String DL_ID = "downloadId";
         private SharedPreferences prefs;
         private DownloadManager dm;
         private ImageView imageView;

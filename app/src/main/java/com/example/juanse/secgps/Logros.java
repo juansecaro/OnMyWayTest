@@ -13,7 +13,7 @@ import com.androidplot.xy.XYSeries;
 import java.util.Arrays;
 
 /**
- * A straightforward example of using AndroidPlot to plot some data.
+ * Generacion de graficos estadísticos con los datos recabados si los hubiere
  */
 public class Logros extends Activity {
 
