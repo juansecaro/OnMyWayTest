@@ -1,119 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/tourconfig">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayout4"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Opciones de ruta"
-        android:id="@+id/categ"
-        android:textSize="@dimen/abc_action_bar_stacked_max_height"
-        android:layout_below="@+id/linearLayout4"
-        android:layout_centerHorizontal="true" />
+        <TextView
+            android:id="@+id/categ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout4"
+            android:text="Opciones de ruta"
+            android:textSize="@dimen/abc_action_bar_progress_bar_size"
+            android:gravity="center_vertical|center_horizontal"
+            android:typeface="serif" />
+    </LinearLayout>
 
-    <CheckBox
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Históricos"
-        android:id="@+id/checkBox1"
-        android:layout_below="@+id/linearLayout4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="70dp" />
+        android:layout_marginTop="200dip">
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Curiosidades"
-        android:id="@+id/checkBox2"
-        android:layout_below="@+id/checkBox1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Turísticos"
-        android:id="@+id/checkBox3"
-        android:layout_alignTop="@+id/checkBox1"
-        android:layout_alignRight="@+id/categ"
-        android:layout_alignEnd="@+id/categ" />
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/linearLayout4"
+                android:text="Históricos" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Gangas"
-        android:id="@+id/checkBox4"
-        android:layout_below="@+id/checkBox3"
-        android:layout_alignLeft="@+id/checkBox3"
-        android:layout_alignStart="@+id/checkBox3" />
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:text="Curiosidades" /></TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+            <CheckBox
+                android:id="@+id/checkBox3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Turísticos" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MARCAR TODOS"
-        android:id="@+id/checkBox5"
-        android:layout_below="@+id/checkBox4"
-        android:layout_centerHorizontal="true" />
+            <CheckBox
+                android:id="@+id/checkBox4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gangas" /></TableRow>
 
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New ToggleButton"
-        android:id="@+id/tog1"
-        android:layout_centerVertical="true"
-        android:layout_alignRight="@+id/checkBox3"
-        android:layout_alignEnd="@+id/checkBox3" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Modo automático"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/categ"
-        android:layout_alignStart="@+id/categ" />
+    </TableLayout>
 
-    <ToggleButton
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="New ToggleButton"
-        android:id="@+id/tog2"
-        android:layout_below="@+id/tog1"
-        android:layout_alignLeft="@+id/tog1"
-        android:layout_alignStart="@+id/tog1"
-        android:layout_marginTop="48dp" />
+        android:layout_marginTop="300dip"
+        android:gravity="center_horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/textView2"
-        android:layout_alignBottom="@+id/tog2"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="Modo automático"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ToggleButton
+                android:id="@+id/tog1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ruta continuada"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ToggleButton
+                android:id="@+id/tog2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+
+                android:text="New ToggleButton" />
+        </TableRow>
+
+    </TableLayout>
 
     <Button
+        android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Comenzar"
-        android:id="@+id/btn"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="51dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:clickable="true"
+        android:text="Comenzar" />
+
+
 </RelativeLayout>
 
 

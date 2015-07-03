@@ -1,6 +1,7 @@
 package com.example.juanse.secgps;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +17,7 @@ public class Tour extends Activity {
     private CheckBox ch2;
     private CheckBox ch3;
     private CheckBox ch4;
-    private CheckBox ch5;
+
     private Button btn;
     private ToggleButton tog1;
     private ToggleButton tog2;
@@ -26,7 +27,15 @@ public class Tour extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tour);
 
+        btn = (Button)findViewById(R.id.btn);
 
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), MainMap.class);
+                startActivity(i);
+            }
+        });
 
 
     }
@@ -43,24 +52,11 @@ public class Tour extends Activity {
         ch2 = (CheckBox)findViewById(R.id.checkBox2);
         ch3 = (CheckBox)findViewById(R.id.checkBox3);
         ch4 = (CheckBox)findViewById(R.id.checkBox4);
-        ch5 = (CheckBox)findViewById(R.id.checkBox5);
-        btn = (Button)findViewById(R.id.btn);
+
         tog1 = (ToggleButton)findViewById(R.id.tog1);
         tog2 = (ToggleButton)findViewById(R.id.tog2);
 
-       /* ch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (ch5.isChecked())
-                {
-                    ch1.
 
-
-                }
-
-
-            }
-        });*/
 
 
         tog1.setOnClickListener(new View.OnClickListener() {
@@ -78,19 +74,9 @@ public class Tour extends Activity {
             }
         });
 
-        btn.setOnClickListener(new View.OnClickListener() {
 
-            //Run when button is clicked
-            @Override
-            public void onClick(View v) {
-
-
-
-            }
-        });
 
     }
-
 
 }
 

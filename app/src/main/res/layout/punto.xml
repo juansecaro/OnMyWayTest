@@ -6,21 +6,6 @@
     android:id="@+id/Puntox">
 
 
-
-
-    <ImageView
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/foto"
-        android:src="@drawable/plaza"
-        android:layout_below="@+id/vistos"
-        android:layout_toLeftOf="@+id/vistos"
-        android:layout_toStartOf="@+id/vistos"
-        android:layout_marginTop="55dip"
-        android:layout_marginLeft="65dip"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,12 +45,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/bPlay"
-        android:layout_alignRight="@+id/foto"
-        android:layout_alignEnd="@+id/foto"
-        android:layout_alignLeft="@+id/foto"
-        android:layout_alignStart="@+id/foto"
         android:src="@android:drawable/ic_media_play"
-        android:layout_alignTop="@+id/imageButton" />
+        android:layout_alignTop="@+id/imageButton"
+        android:layout_toLeftOf="@+id/vistos" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -84,10 +66,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/menu"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:src="@mipmap/ic_action_overflow"
-        android:layout_alignBottom="@+id/vistos"
-        android:layout_toStartOf="@+id/foto" />
+        android:layout_alignBottom="@+id/vistos" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/foto"
+        android:layout_below="@+id/vistos"
+        android:layout_toRightOf="@+id/menu"
+        android:layout_toEndOf="@+id/menu"
+        android:layout_marginTop="98dp" />
 
 </RelativeLayout>

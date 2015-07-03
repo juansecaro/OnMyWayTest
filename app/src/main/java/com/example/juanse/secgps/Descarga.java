@@ -102,7 +102,7 @@ import net.lingala.zip4j.exception.ZipException;
                         // Extracts all files to the path specified
                         zipFile.extractAll(unzipLocation);
                         // Call the map main activity to draw the points
-                        Intent i = new Intent(getApplicationContext(), MainMap.class);
+                        Intent i = new Intent(getApplicationContext(), Tour.class);
                         startActivity(i);
                         this.finish();
 

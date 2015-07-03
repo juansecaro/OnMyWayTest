@@ -2,7 +2,6 @@ package com.example.juanse.secgps;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.WindowManager;
 
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.PointLabelFormatter;
@@ -13,7 +12,7 @@ import com.androidplot.xy.XYSeries;
 import java.util.Arrays;
 
 /**
- * Generacion de graficos estadísticos con los datos recabados si los hubiere
+ * Generacion de graficos estadisticos con los datos recabados si los hubiere
  */
 public class Logros extends Activity {
 
@@ -25,8 +24,8 @@ public class Logros extends Activity {
 
         // fun little snippet that prevents users from taking screenshots
         // on ICS+ devices :-)
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-                WindowManager.LayoutParams.FLAG_SECURE);
+       /* getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE);*/
 
         setContentView(R.layout.logros);
 
@@ -66,6 +65,7 @@ public class Logros extends Activity {
         // reduce the number of range labels
         plot.setTicksPerRangeLabel(3);
         plot.getGraphWidget().setDomainLabelOrientation(-45);
+
 
     }
 }
